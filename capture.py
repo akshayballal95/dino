@@ -5,43 +5,55 @@ import keyboard
 import os
 from datetime import datetime
 
-current_key = "1"
+current_key
 buffer = []
 
-
-isExist = os.path.exists("captures")
-
-if isExist:
-    dir = 'captures'
-    for f in os.listdir(dir):
-        os.remove(os.path.join(dir, f))
-
-else:
-
+# check if folder named 'captures' exists. If not, create it.
+if not os.path.exists("captures"):
     os.mkdir("captures")
 
 def keyboardCallBack(key: keyboard.KeyboardEvent):
+    '''
+    This function is called when a keyboard event occurs. It stores the key pressed in a buffer and sorts it.
+
+    ### Arguments : 
+    `key (KeyboardEvent)`
+
+    ### Returns : 
+    `None`
+
+    ### Example : 
+    `keyboardCallBack(key)`
+    '''
+
     global current_key
 
     if key.event_type == "down" and key.name not in buffer:
         buffer.append(key.name)
-    
+
     if key.event_type == "up":
         buffer.remove(key.name)
 
-    buffer.sort()
+    buffer.sort()  # Arrange the keys pressed in an ascending order
     current_key = " ".join(buffer)
 
-keyboard.hook(callback=keyboardCallBack)
-i=0
 
-while(not keyboard.is_pressed("esc")):
-    
-    ###uncomment for dino game
-    # image = cv2.cvtColor(np.array(ImageGrab.grab(bbox = (620,220,1280,360))), cv2.COLOR_RGB2BGR)
-    image = cv2.cvtColor(np.array(ImageGrab.grab(bbox = (685,350,1235,840))), cv2.COLOR_RGB2BGR)
-    if len(buffer)!=0:
-        cv2.imwrite("captures/" + str(datetime.now()).replace("-","_").replace(":","_").replace(" ", "_")+" "+ current_key +".png", image)
+keyboard.hook(callback=keyboardCallBack)
+i = 0
+
+while (not keyboard.is_pressed("esc")):
+
+    # Capture image and save to the 'captures' folder with time and date along with the key being pressed
+    image = cv2.cvtColor(np.array(ImageGrab.grab(
+        bbox=(620, 220, 1280, 360))), cv2.COLOR_RGB2BGR)
+
+    # if key pressed embed the key pressed in the file name
+    if len(buffer) != 0:
+        cv2.imwrite("captures/" + str(datetime.now()).replace("-", "_").replace(":",
+                    "_").replace(" ", "_")+" " + current_key + ".png", image)
+
+    # if no key pressed embed 'n' in the file name
     else:
-         cv2.imwrite("captures/" + str(datetime.now()).replace("-","_").replace(":","_").replace(" ", "_") + " n" +".png", image)
-    i= i+1
+        cv2.imwrite("captures/" + str(datetime.now()).replace("-",
+                    "_").replace(":", "_").replace(" ", "_") + " n" + ".png", image)
+    i = i+1
