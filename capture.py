@@ -5,7 +5,7 @@ import keyboard
 import os
 from datetime import datetime
 
-current_key
+current_key = ""
 buffer = []
 
 # check if folder named 'captures' exists. If not, create it.

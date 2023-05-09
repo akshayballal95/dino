@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 model = efficientnet_v2_s()
 model.classifier = torch.nn.Linear(in_features = 1280, out_features = 2)
-model.load_state_dict(torch.load("models/efficientnet_s.pth"))
+model.load_state_dict(torch.load("efficientnet_s.pth"))
 model.to("cuda")
 model.eval()
 
@@ -25,7 +25,7 @@ def generator():
 
 for _ in tqdm(generator()):
     image = ImageGrab.grab(bbox = (620,220,1280,360)) 
-    image = ToTensor()(image)
+    image = ToTensor()(image)                    
     image = image.to("cuda")
     image = transformer(image)
     outputs = model(image[None , ...])
